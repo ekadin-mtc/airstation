@@ -16,6 +16,8 @@ type rawAudioMetadata struct {
 		BitRate  string `json:"bit_rate"`
 		Tags     struct {
 			Title string `json:"title"`
+			Album string `json:"album"`
+			Artist string `json:"artist"`
 		} `json:"tags"`
 	} `json:"format"`
 	Streams []struct {
