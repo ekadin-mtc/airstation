@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/cheatsnake/airstation/internal/tools/fs"
 	"github.com/cheatsnake/airstation/internal/tools/ulid"
@@ -108,13 +109,13 @@ func (cli *CLI) AudioMetadata(filePath string) (AudioMetadata, error) {
 	artist := rawMetadata.Format.Tags.Artist
 
 	if name == "" {
-			name = "Unknown Title"
+		name = strings.TrimSuffix(filepath.Base(filePath), filepath.Ext(filePath))
 	}
 	if album == "" {
-			album = "Unknown Album"
+		album = "Unknown Album"
 	}
 	if artist == "" {
-			artist = "Unknown Artist"
+		artist = "Unknown Artist"
 	}
 	duration, err := strconv.ParseFloat(rawMetadata.Format.Duration, 64)
 	if err != nil {
@@ -137,7 +138,7 @@ func (cli *CLI) AudioMetadata(filePath string) (AudioMetadata, error) {
 		return metadata, fmt.Errorf("parsing metadata sample rate failed: %v", err)
 	}
 
-	metadata.Name = fmt.Sprintf("%s - %s", name, album, artist)
+	metadata.Name = fmt.Sprintf("%s - %s - %s", name, album, artist)
 	metadata.Duration = duration
 	metadata.BitRate = int(bitRate / 1000)
 	metadata.ChannelCount = channels
