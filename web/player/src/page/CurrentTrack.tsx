@@ -33,6 +33,9 @@ export const CurrentTrack = () => {
     return (
         <div class={styles.box}>
             <Show when={trackStore.trackName.length > 0} fallback={<OfflineLabel />}>
+                <div class={styles.label}>
+                    <u>NOW PLAYING</u>
+                </div>
                 <div onClick={copyToClipboard} class={styles.label}>
                     {trackStore.trackName}
                 </div>

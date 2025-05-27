@@ -1,0 +1,28 @@
+.box {
+    width: 100%;
+}
+
+.label,
+.offline_label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 1rem 0.5rem;
+}
+
+.offline_label {
+    user-select: none;
+    cursor: default;
+    color: #a8a8a8;
+}
+
+.offline_label_icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgb(240, 78, 78);
+}

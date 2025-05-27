@@ -5,6 +5,7 @@ import { Component, onCleanup, onMount } from "solid-js";
 import { addEventListener, EVENTS } from "../store/events";
 import { getUnixTime } from "../utils/date";
 import { addHistory } from "../store/history";
+import { airstationAPI } from "../api";
 
 const STREAM_SOURCE = "/stream";
 
@@ -34,12 +35,19 @@ export const RadioButton = () => {
     onMount(() => {
         addEventListener(EVENTS.pause, (_e: MessageEvent<string>) => {
             setTrackStore("trackName", "");
+            setTrackStore("nextTrackName", "");
             (() => videoRef?.pause())();
         });
 
-        addEventListener(EVENTS.play, (e: MessageEvent<string>) => {
+        addEventListener(EVENTS.play, async (e: MessageEvent<string>) => {
             const unixTime = getUnixTime();
             setTrackStore("trackName", e.data);
+            try {
+                const cs = await airstationAPI.getPlayback();
+                if (cs.nextTrack) setTrackStore("nextTrackName", cs.nextTrack.name);
+            } catch (error) {
+                console.log(error);
+            }
             addHistory({ id: unixTime, playedAt: unixTime, trackName: e.data });
 
             if (trackStore.isPlay) (() => videoRef?.pause())();

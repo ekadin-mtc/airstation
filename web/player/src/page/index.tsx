@@ -1,5 +1,6 @@
 import { onMount, onCleanup } from "solid-js";
 import { CurrentTrack } from "./CurrentTrack";
+import { NextTrack } from "./NextTrack";
 import { ListenersCounter } from "./ListenersCounter";
 import { RadioButton } from "./RadioButton";
 import { closeEventSource, initEventSource } from "../store/events";
@@ -24,6 +25,7 @@ export const Page = () => {
             </div>
             <RadioButton />
             <CurrentTrack />
+            <NextTrack />
         </div>
     );
 };

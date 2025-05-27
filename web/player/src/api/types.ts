@@ -8,6 +8,7 @@ export interface Track {
 
 export interface PlaybackState {
     currentTrack: Track | null;
+    nextTrack: Track | null;
     currentTrackElapsed: number;
     isPlaying: boolean;
 }

@@ -21,6 +21,7 @@ import (
 // elapsed playback time, playlist management, and synchronization tools for safe concurrent access.
 type State struct {
 	CurrentTrack        *track.Track `json:"currentTrack"`        // The currently playing track
+	NextTrack        		*track.Track `json:"nextTrack"`        // The next track in the queue
 	CurrentTrackElapsed float64      `json:"currentTrackElapsed"` // Seconds elapsed since the current track started playing
 	IsPlaying           bool         `json:"isPlaying"`           // Whether a track is currently playing
 	UpdatedAt           int64        `json:"updatedAt"`           // Unix timestamp of the last state update
@@ -48,6 +49,7 @@ type State struct {
 func NewState(ts *track.Service, qs *queue.Service, ps *Service, tmpDir string, log *slog.Logger) *State {
 	return &State{
 		CurrentTrack:        nil,
+		NextTrack:           nil,
 		CurrentTrackElapsed: 0,
 		IsPlaying:           false,
 		UpdatedAt:           time.Now().Unix(),
@@ -116,6 +118,7 @@ func (s *State) Play() error {
 
 	s.mutex.Lock()
 	s.CurrentTrack = current
+	s.NextTrack = next
 	s.PlaylistStr = s.playlist.Generate(s.CurrentTrackElapsed)
 	s.UpdatedAt = time.Now().Unix()
 	s.IsPlaying = true
@@ -210,6 +213,7 @@ func (s *State) loadNextTrack() error {
 	}
 
 	s.CurrentTrack = current
+	s.NextTrack = next
 	nextTrackSegments, err := s.makeHLSSegments(next, s.playlistDir)
 	if err != nil {
 		return err
